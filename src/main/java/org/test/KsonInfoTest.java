@@ -14,7 +14,7 @@ import org.protojson.runner.JsonRowConverter;
 
 public class KsonInfoTest {
 
-    private static final int LOOP = 1000000;
+    private static final int LOOP = 10000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static void main(String[] args) throws IOException {
@@ -73,6 +73,7 @@ public class KsonInfoTest {
         testJackson(json);
         testProtoJson(json, params);
         testSimdJson(json);
+        testSimdJson1(json);
         testSimdKson(json, params);
     }
 
@@ -101,6 +102,74 @@ public class KsonInfoTest {
         SimdJsonParser parser = new SimdJsonParser();
         for (int i = 0; i < LOOP; i++) {
             JsonValue value = parser.parse(json.getBytes(), json.length());
+            value.get("sdk_ver").toString();
+            value.get("extra_message").get("controller_id").toString();
+            value.get("extra_message").get("request_id").toString();
+            value.get("extra_message").get("caller_class").toString();
+            value.get("extra_message").get("photo_id").toString();
+            value.get("extra_message").get("custom_message").toString();
+            value.get("config").get("max_retry_count").toString();
+            value.get("config").get("bitmap_type").toString();
+            value.get("config").get("max_decoded_mem_cache_size").toString();
+            value.get("config").get("max_encoded_mem_cache_size").toString();
+            value.get("config").get("max_disk_cache_size").toString();
+            value.get("options").get("ratio").toString();
+            value.get("options").get("url").toString();
+            value.get("options").get("urls").toString();
+            value.get("options").get("view_width").toString();
+            value.get("options").get("view_height").toString();
+            value.get("options").get("view_exists").toString();
+            value.get("meta").get("format").toString();
+            value.get("meta").get("size").toString();
+            value.get("meta").get("width").toString();
+            value.get("meta").get("height").toString();
+            value.get("meta").get("frame_count").toString();
+            value.get("stat").get("status").toString();
+            value.get("stat").get("data_source").toString();
+            value.get("stat").get("error_message").toString();
+            value.get("stat").get("first_screen").toString();
+            value.get("stat").get("stay_duration").toString();
+            value.get("stat").get("error_code").toString();
+            value.get("cache").get("cost").toString();
+            value.get("cache").get("decoded_mem_cached_count").toString();
+            value.get("cache").get("decoded_mem_cached_size").toString();
+            value.get("cache").get("encoded_mem_cached_count").toString();
+            value.get("cache").get("encoded_mem_cached_size").toString();
+            value.get("cache").get("disk_cached_count").toString();
+            value.get("cache").get("disk_cached_size").toString();
+            value.get("network").get("status").toString();
+            value.get("network").get("cost").toString();
+            value.get("network").get("url").toString();
+            value.get("network").get("server_ip").toString();
+            value.get("network").get("host").toString();
+            value.get("network").get("retry_count").toString();
+            value.get("network").get("http_code").toString();
+            value.get("network").get("error_message").toString();
+            value.get("network").get("kimg_proxy").toString();
+            value.get("network").get("image_origin").toString();
+            value.get("network").get("url_origin").toString();
+            value.get("decode").get("status").toString();
+            value.get("decode").get("cost").toString();
+            value.get("decode").get("width").toString();
+            value.get("decode").get("height").toString();
+            value.get("decode").get("bitmap_type").toString();
+            value.get("bs_info").get("biz_ft").toString();
+            value.get("bs_info").get("biz_extra").toString();
+            value.get("bs_info").get("scene").toString();
+            value.get("bs_info").get("biz_type").toString();
+            value.get("sys_prof").get("in_background").toString();
+            value.get("sys_prof").get("mem_usage").toString();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("json length: " + json.length() + ", SimdJson cost:" + (end - start));
+
+    }
+
+    private static void testSimdJson1(String json) {
+        long start = System.currentTimeMillis();
+        org.simdjson1.SimdJsonParser parser = new org.simdjson1.SimdJsonParser();
+        for (int i = 0; i < LOOP; i++) {
+            org.simdjson1.JsonValue value = parser.parse(json.getBytes(), json.length());
             value.get("sdk_ver").toString();
             value.get("extra_message").get("controller_id").toString();
             value.get("extra_message").get("request_id").toString();
