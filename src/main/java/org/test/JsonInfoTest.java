@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import jdk.incubator.vector.ByteVector;
 
+import org.protojson.runner.JsonRowSkipConverter;
 import org.simdjson.JsonValue;
 import org.simdjson.SimdJsonParser;
 import org.simdjson.SimdKsonParser;
@@ -14,9 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.protojson.runner.JsonRowConverter;
 
-public class KsonInfoTest {
+public class JsonInfoTest {
 
-    private static final int LOOP = 10000;
+    private static final int LOOP = 100000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static void main(String[] args) throws IOException {
@@ -74,11 +75,16 @@ public class KsonInfoTest {
                         "decode.status", "decode.cost", "decode.width", "decode.height", "decode.bitmap_type",
                         "bs_info.biz_ft", "bs_info.biz_extra", "bs_info.scene", "bs_info.biz_type",
                         "sys_prof.in_background", "sys_prof.mem_usage"};
+        String[] params1 = {"sdk_ver", "config.max_retry_count", "extra_message.photo_id"};
         testJackson(json);
         testProtoJson(json, params);
+        testProtoJson1(json, params);
         testSimdJson(json);
         testSimdJson1(json);
         testSimdKson(json, params);
+        // 少数确定字段，跟json顺序强相关
+        testProtoJson(json, params1);
+        testProtoJson1(json, params1);
     }
 
     private static void testProtoJson(String json, String[] params) throws IOException {
@@ -89,6 +95,16 @@ public class KsonInfoTest {
         }
         long end = System.currentTimeMillis();
         System.out.println("json length: " + json.length() + ", ProtoJson cost:" + (end - start));
+    }
+
+    private static void testProtoJson1(String json, String[] params) throws IOException {
+        long start = System.currentTimeMillis();
+        JsonRowSkipConverter converter = new JsonRowSkipConverter(params);
+        for (int i = 0; i < LOOP; i++) {
+            converter.process(json);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("json length: " + json.length() + ", ProtoJson1 cost:" + (end - start));
     }
 
     private static void testSimdKson(String json, String[] params) {
