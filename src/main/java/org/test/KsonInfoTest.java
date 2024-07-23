@@ -2,6 +2,8 @@ package org.test;
 
 import java.io.IOException;
 
+import jdk.incubator.vector.ByteVector;
+
 import org.simdjson.JsonValue;
 import org.simdjson.SimdJsonParser;
 import org.simdjson.SimdKsonParser;
@@ -18,6 +20,8 @@ public class KsonInfoTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static void main(String[] args) throws IOException {
+        System.out.println(ByteVector.SPECIES_PREFERRED);
+
         String json =
                 "{\"sdk_ver\":\"4.7.1.0\",\"config\":{\"max_retry_count\":1,\"bitmap_type\":\"RGB_565\","
                         + "\"max_decoded_mem_cache_size\":74658610,\"max_encoded_mem_cache_size\":4194304,"
@@ -229,7 +233,7 @@ public class KsonInfoTest {
             value.get("sys_prof").get("mem_usage").toString();
         }
         long end = System.currentTimeMillis();
-        System.out.println("json length: " + json.length() + ", SimdJson cost:" + (end - start));
+        System.out.println("json length: " + json.length() + ", SimdJson1 cost:" + (end - start));
 
     }
 
